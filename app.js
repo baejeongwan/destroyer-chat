@@ -97,9 +97,9 @@ io.sockets.on('connection', function(socket) {
     })
 })
 
-server.listen('443', function () {
-    console.log("Server running!");
-});
+server.listen('443', 'destroyer-chats.herokuapp.com', function () {
+    console.log("Server listening..")
+})
 
 function saveData() {
     fs.writeFileSync('./chats.json', JSON.stringify(record));
