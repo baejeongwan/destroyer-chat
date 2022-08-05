@@ -97,7 +97,7 @@ io.sockets.on('connection', function(socket) {
     })
 })
 
-server.listen('443', 'destroyer-chats.herokuapp.com', function () {
+server.listen(process.env.PORT || 443, function () {
     console.log("Server listening..")
 })
 
