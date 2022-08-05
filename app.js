@@ -1,9 +1,10 @@
 const express = require('express');
 const socket = require('socket.io');
-const https = require('https');
+const http = require('http');
 const fs = require('fs');
 const app = express();
-const server = https.createServer({key: fs.readFileSync('./certs/private.key'), ca: fs.readFileSync('./certs/root.ca.crt'), cert: fs.readFileSync('./certs/private.crt'), passphrase: "jaydenbae"}, app);
+//const server = https.createServer({key: fs.readFileSync('./certs/private.key'), ca: fs.readFileSync('./certs/root.ca.crt'), cert: fs.readFileSync('./certs/private.crt'), passphrase: "jaydenbae"}, app);
+const server = http.createServer(app);
 const io = socket(server);
 
 
@@ -97,8 +98,8 @@ io.sockets.on('connection', function(socket) {
     })
 })
 
-server.listen(process.env.PORT || 443, function () {
-    console.log("Server listening..")
+server.listen(process.env.PORT || 80, function () {
+    console.log("Server listening..@", process.env.PORT || 80);
 })
 
 function saveData() {
