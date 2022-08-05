@@ -4,7 +4,7 @@
   "description": "Live Chat @ WS",
   "main": "app.js",
   "scripts": {
-    "serve": "node app.js",
+    "run": "node app.js",
     "newuser": "node newuser.js",
     "clearchat": "node clearchat.js"
   },
