@@ -1,0 +1,19 @@
+{
+  "name": "destroyer-chat",
+  "version": "1.0.0",
+  "description": "Live Chat @ WS",
+  "main": "app.js",
+  "scripts": {
+    "serve": "node app.js",
+    "newuser": "node newuser.js",
+    "clearchat": "node clearchat.js"
+  },
+  "author": "Jayden Bae",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1",
+    "nodemon": "^2.0.19",
+    "readline": "^1.3.0",
+    "socket.io": "^4.5.1"
+  }
+}
