@@ -5,8 +5,22 @@ let settingModal = new bootstrap.Modal(getID('settingModal'), {backdrop: 'static
 let user;
 let isReady = false;
 let isAlt;
+let settingData;
 
-usernameModal.show();
+init();
+
+function init() {
+    if (document.cookie != "") {
+        //Broken information
+        delCookie();
+    } else {
+        //Not logged in
+        usernameModal.show();
+    }
+    getID('settingModal').addEventListener('show.bs.modal', () => {
+        loadSettings();
+    })
+}
 
 socket.on('connect', function() {
     getID('chatBox').innerHTML += `
@@ -29,10 +43,10 @@ socket.on('message', (data) => {
     getID('chatBox').innerHTML += `
     <div class="alert alert-primary chatAlert" role="alert">
         ${data.message}
-        <hr>
-        ${data.writer}
+        <br>
+        <small class="text-muted">${data.writer}</small>
     </div>`
-    if (isReady && !(getCookie('userName') == data.writer)) {
+    if (isReady && !(getCookie('userName') == data.writer) && settingData.notif) {
         new Notification(data.writer, {body: data.message});
     }
     getID('chatBox').scrollTop = getID('chatBox').scrollHeight;
@@ -59,6 +73,15 @@ socket.on('authOK', (data) => {
     usernameModal.hide();
     if (!(Notification.permission == 'granted')) {
         Notification.requestPermission();
+    }
+    if (localStorage.getItem('setting') == null) {
+        let data = {
+            notif: true
+        };
+        localStorage.setItem('setting', JSON.stringify(data));
+        settingData = data;
+    } else {
+        settingData = JSON.parse(localStorage.getItem('setting'));
     }
 })
 
@@ -106,40 +129,19 @@ window.onkeyup = function (e) {
     }
 }
 
-function getID(id) {
-    return document.getElementById(id)
-}
-
-function getCookie(cname) {
-    var name = cname + "=";  
-    var decodedCookie = decodeURIComponent(document.cookie);  
-    var ca = decodedCookie.split(';');  
-    for(var i = 0; i <ca.length; i++) {  
-        var c = ca[i];  
-        while (c.charAt(0) == ' ') {  
-            c = c.substring(1);  
-        }
-  
-        if (c.indexOf(name) == 0) {  
-            return c.substring(name.length, c.length);  
-        }
-    }
-  
-    return "";  
-} 
-  
-function delCookie() {
-    var cookies = document.cookie.split(";");
-    for (var i = 0; i < cookies.length; i++) {
-        var cookie = cookies[i];
-        var eqPos = cookie.indexOf("=");
-        var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    }
-    location.reload()
-
-}
 
 function setNotifPermission() {
     Notification.requestPermission();
+}
+
+function saveSetting() {
+    let data = {
+        notif: getID('notificationEnableSwitch').checked
+    };
+    localStorage.setItem('setting', JSON.stringify(data));
+    settingData = data;
+}
+
+function loadSettings() {
+    getID('notificationEnableSwitch').checked = settingData.notif;
 }
