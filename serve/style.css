@@ -3,13 +3,13 @@
 }
 
 #chatBox {
-    height: 80vh;
+    height: 65vh;
     overflow-y: scroll;
 }
 
 #inputBox {
-    height: 50px;
-    width: 500px;
+    height: 25vh;
+    width: 60vw;
     margin: 0 auto;
     display: flex;
 }

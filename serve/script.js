@@ -6,6 +6,8 @@ let user;
 let isReady = false;
 let isAlt;
 let settingData;
+const editor = Jodit.make('#messageBox')
+
 
 init();
 
@@ -20,6 +22,7 @@ function init() {
     getID('settingModal').addEventListener('show.bs.modal', () => {
         loadSettings();
     })
+
 }
 
 socket.on('connect', function() {
