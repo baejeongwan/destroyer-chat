@@ -86,6 +86,7 @@ socket.on('authOK', (data) => {
     } else {
         settingData = JSON.parse(localStorage.getItem('setting'));
     }
+    socket.emit("requestChatData");
 })
 
 socket.on('authErr', (data) => {

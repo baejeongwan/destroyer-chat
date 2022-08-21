@@ -54,10 +54,6 @@ io.sockets.on('connection', function(socket) {
                     record.push(dataPush);
                     saveData();
                     userID = element.nickname;
-                    record.forEach((element, index) => {
-                        socket.emit(element.type, element.data);
-                    });
-                    socket.emit('loaddone', 'loaddone');
                 }
             }
         });
@@ -95,6 +91,13 @@ io.sockets.on('connection', function(socket) {
         };
         record.push(dataPush);
         saveData();
+    })
+
+    socket.on("requestChatData", function (data) {
+        record.forEach((element, index) => {
+            socket.emit(element.type, element.data);
+        });
+        socket.emit('loaddone', 'loaddone');
     })
 })
 
