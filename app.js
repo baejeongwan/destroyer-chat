@@ -2,13 +2,47 @@ const express = require('express');
 const socket = require('socket.io');
 const http = require('http');
 const fs = require('fs');
+const push = require('web-push');
+const bodyParser = require('body-parser');
+const path = require('path');
+const vhost = require('vhost');
 const app = express();
+const website = express();
 //const server = https.createServer({key: fs.readFileSync('./certs/private.key'), ca: fs.readFileSync('./certs/root.ca.crt'), cert: fs.readFileSync('./certs/private.crt'), passphrase: "jaydenbae"}, app);
-const server = http.createServer(app);
+const server = http.createServer(app, website);
 const io = socket(server);
 
+const publicVAPIDKey = "BE0w5cacTk7qYkoMbldLwO9VZXYGJutmdrFTTNDvcgLiDGB1pZoRaWZuWz2t122ixQR9rQI6IW8BOHveCyyw9fs";
+const privateVAPIDKey = "wohgXHjkyrcu7pulpZiM0Mb7GPb81_jP6DXoNR7Hgtw";
+push.setVapidDetails('mailto:jayden.bae@outlook.kr', publicVAPIDKey, privateVAPIDKey)
 
-app.use(express.static('./serve'));
+app.use(express.static(path.join(__dirname, "serve")));
+website.use(express.static((path.join(__dirname, "thedestroyers"))))
+website.use(vhost("thedestroyers.com", app));
+website.use(vhost("www.thedestroyers.com", app));
+app.use(vhost("chat.thedestroyers.com", website));
+
+app.use(bodyParser.json());
+let pushSubscription = [];
+
+setInterval(() => {
+    const payload = JSON.stringify({ title: "Push Hi"});
+    if (pushSubscription != null) {
+        pushSubscription.forEach((value) => {
+            push.sendNotification(value, payload).catch((err) => {
+                console.log("error")
+            })
+        })
+    }
+    
+}, 2000);
+
+app.post("/push", (req, res) => {
+    const subscription = req.body;
+    console.log(req.body)
+    pushSubscription.push(subscription)
+    res.status(201).json({});
+})
 
 let record;
 let user;

@@ -166,12 +166,13 @@
         <script src="./utility.js"></script>
         <script src="./script.js"></script>
         <script>
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js')
-                .then((reg) => {
-                    console.log("서비스 워커 등록됨", reg)
+            if ("serviceWorker" in navigator) {
+                const worker = navigator.serviceWorker.register('sw.js').then((serviceWorkerReg) => {
+                    console.log("REGISTER")
                 })
+                console.log("서비스 워커 등록됨");
             }
+
         </script>
     </body>
 </html>
